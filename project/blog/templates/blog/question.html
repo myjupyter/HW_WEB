@@ -1,0 +1,67 @@
+{% extends "blog/wrapper.html" %}
+{% block headcontent %} 
+  {% load staticfiles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'blog/css/question.css' %}"> 
+  <title>{{question.title}}</title>
+{% endblock %}
+
+
+
+{% block bodycontent %}
+    <div class="row">
+
+      <div class="col-2">
+        <img class="photo" src="{{question.author.avatar.url}}">
+        <div class = 'user_name'>{{ question.author }}</div>
+      </div>
+
+      <div class"col-8">
+        <div class='question_title'>{{ question.title }}</div>
+        <div class='question_text'>{{question.text}}</div>
+        <div class='question_time'>Asked: {{question.published_date}}</div>
+        <div class="btn-group" id='buttons'>
+          <button type="button" class="btn btn-success">Like<span class="badge">{{question.likes}}</span></button>
+          <button type="button" class="btn btn-danger">Dislike<span class="badge">{{question.dislikes}}</span></button>
+        </div>
+      </div>
+
+    </div>
+  <hr size=4px align="left">
+    <div class="col-sm-12">
+     <div class "form-group">
+        <label for="comment">Comment:</label>
+        <textarea class="form-control" rows="5" id="comment" placeholder="Your answer"></textarea>
+        <button type="submit" class="btn btn-primary" id="submitbutton">Submit</button>
+      </div>
+
+    </div>
+    <div class="answer_block">
+    {% if answers %}
+      </br>
+      <h3>Answers</h3>
+      {%for answer in answers %}
+        <hr size=4px align="left">
+        <div class = "row" id = 'answ'>
+          <div class="col-2">
+            <div class="user_info">
+              <img class="photo" src="{{answer.author.avatar.url}}">
+              <div class='user_name'>{{answer.author}}</div>
+            </div>
+          </div>
+          <div class="col-8">
+            <div class='answer_text'>{{answer.answer_text}}</div>
+            <div class='answer_time'>Answered: {{answer.published_date}}</div>
+            <div class="btn-group" id='buttons'>
+              <button type="button" class="btn btn-success">Like<span class="badge">{{answer.likes}}</span></button>
+              <button type="button" class="btn btn-danger">Dislike<span class="badge">{{answer.dislikes}}</span></button>
+            </div>
+          </div>
+          <hr size=4px align="left">
+        </div>
+      {% endfor %}
+    {% else %}
+    </br>
+    <h2>There is no answers</h2>
+    {% endif %}
+    </div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'node_modules/bootstrap/dist/css/bootstrap.min.css' %}">
+    <script src="../../static/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../static/node_modules/popper.js/dist/umd/popper.min.js"></script>
+    <script src="../../static/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'blog/css/wrapper.css' %}">
+    {% block headcontent %}
+    {% endblock %}
+
+  </head>
+
+  <body>
+    {% block navbar %}
+      <header>
+      <!-- Fixed navbar -->
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="{% url 'home' %}">ASKME.RU</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'home' %}">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'ask' %}">Ask<span class="sr-only">(current)</span></a>
+            </li>
+
+          </ul>
+          <div class="searching">
+          <form class="form-inline mt-2 mt-0">
+            <input class="form-control mr-sm-2" placeholder="Search" aria-label="Search" type="text">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+          </div>
+           <ul class="nav navbar-nav navbar-right">
+            <li><a class="nav-link" href="{% url 'SignUp'%}"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><a class="nav-link" href="{% url 'LogIn' %}"><span class="glyphicon glyphicon-log-in"></span> LogIn</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+    {% endblock %}
+ 
+    <main role="main" class="container">
+      {% block beforebody %} 
+      {% endblock %}
+    <div class='row'> 
+        <div class='col-10'>
+          {% block bodycontent %}
+          {% endblock %}
+        </div>
+       <div class="col-2" id='left_panel'>
+           <ul class="list-group submenu">
+             <li class="list-group-item list-group-item-success" id="lp">Top 10 users</li>
+             {% for user in users %} <li class="list-group-item"><a href="{% url 'home' %}">{{ user.username }}</a></li> {% endfor %}
+            <li class="list-group-item list-group-item-success" id="lp">Top 10 tags</li>
+            {% for tag in tags %} <li class="list-group-item"><a href="{% url 'to_questions_by_tag' tag_id=tag.id %}">{{ tag.tag_name }} ({{tag.post_count}})</a></li> {% endfor %}
+          </ul>
+        </div>
+    </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+      </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery-slim.min.js"><\/script>')</script>
+    </body>
+</html>

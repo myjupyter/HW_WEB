@@ -1,0 +1,85 @@
+{% extends "blog/wrapper.html" %}
+{% block headcontent %}
+  {% load staticfiles %}
+  <link rel="stylesheet" type="text/css" href="{% static 'blog/css/objects.css' %}">
+  {% load bootstrap_pagination %}
+  <title>Home Page</title>
+{% endblock%}
+
+{% block navbar %}
+    <header>
+      <!-- Fixed navbar -->
+      <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="{% url 'home' %}">ASKME.RU</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'home' %}">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'ask' %}">Ask<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'settings' %}">Settings<span class="sr-only">(current)</span></a>
+            </li>
+          </ul>
+          <div class="searching">
+          <form class="form-inline mt-2 mt-0">
+            <input class="form-control mr-sm-2" placeholder="Search" aria-label="Search" type="text">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+          </form>
+          </div>
+           <ul class="nav navbar-nav navbar-right">
+            <li><a class="nav-link" href="{% url 'home' %}"><span class="glyphicon glyphicon-user"></span> Exit</a></li>
+          </ul>
+        </div>
+      </nav>
+    </header>
+
+{% endblock %}
+
+{% block beforebody%}
+  <ul class="breadcrumb">
+    <li><a href="{% url 'order_questions_by_time' %}">New Questions</a></li>
+    <li><a href="{% url 'order_questions_by_rating' %}">Popular Questions</a></li>
+  </ul>
+{% endblock %}
+
+{% block bodycontent %}
+  {% if questions %}
+
+    {% for q in questions %}
+      <div class="row" id="question_side">
+
+        <div class="col-2">
+          <div class="info">
+            <img class="photo" src="{{q.author.avatar.url}}">
+            <div class="user_name"> {{ q.author.username }} </div>
+          </div>
+        </div>
+
+        <div class="col-10">
+          <div class="title"><a class ="navbar-brand" href="{% url 'to_question' question_id=q.id %}">{{q.title}}</a></div>
+          <div class="text"><p>{{ q.text|truncatewords:15 }}</p></div>
+          <div class="tags">
+            Answers ({{q.count_of_answers}})
+            </br>
+            Tags:{% for q_tag in q.tags.all %}  <a href="{% url 'to_questions_by_tag' tag_id=q_tag.id %}">{{ q_tag }}</a>{% endfor %}
+          </div>
+          <div class="publishdate">  Asked: {{ q.published_date }}</div>
+           <div class="btn-group" id='buttons'>
+            <button type="button" class="btn btn-success">Like<span class="badge">{{q.likes}}</span></button>
+            <button type="button" class="btn btn-danger">Dislike<span class="badge">{{q.dislikes}}</span></button>
+          </div>
+        </div>
+
+      </div>
+      <hr size=4px align="left">
+    {% endfor %}
+      <div class="pagination-centered">{% bootstrap_paginate questions range=4%}</div>
+  {% endif %}
+{% endblock%}
+
